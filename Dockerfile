@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM gradle:8.5.0-jdk21 AS build
+FROM gradle:8.5-jdk21 AS build
 WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle build.gradle settings.gradle ./
 COPY --chown=gradle:gradle src ./src
