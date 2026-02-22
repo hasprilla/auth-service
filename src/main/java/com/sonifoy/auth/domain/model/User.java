@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -22,18 +23,29 @@ public class User {
     private String email;
     private String name;
     private String password;
-    private String profileType; // e.g. "LISTENER", "ARTIST", "LABEL"
-
-    @Builder.Default
-    private boolean verified = false;
+    @Column("profile_type")
+    private String profileType;
+    private boolean verified;
+    @Column("verification_code")
     private String verificationCode;
-
+    @Column("verification_code_expires_at")
+    private LocalDateTime verificationCodeExpiresAt;
+    @Column("avatar_url")
+    private String avatarUrl;
+    @Column("ip_address")
+    private String ipAddress;
+    private String city;
+    private String country;
+    @Column("device_data")
+    private String deviceData;
+    @Column("last_login_at")
+    private LocalDateTime lastLoginAt;
+    @Column("created_at")
     private LocalDateTime createdAt;
+    @Column("updated_at")
     private LocalDateTime updatedAt;
 
-    // Roles are handled differently in R2DBC vs JPA, often as a separate table or
-    // JSON/Array column.
-    // Simplifying here to just profileType first, or if using roles array in
-    // Postgres
+    // Roles are handled as a Set of Strings, mapped to TEXT[] in Postgres via R2DBC
+    @Column("roles")
     private Set<String> roles;
 }
