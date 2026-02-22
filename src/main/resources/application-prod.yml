@@ -15,4 +15,4 @@ eureka:
       defaultZone: ${EUREKA_URI:http://discovery-service:8761/eureka/}
   instance:
     hostname: ${RAILWAY_PRIVATE_DOMAIN:localhost}
-    preferIpAddress: true
+    preferIpAddress: false
