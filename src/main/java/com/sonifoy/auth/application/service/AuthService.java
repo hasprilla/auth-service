@@ -7,6 +7,8 @@ import com.sonifoy.auth.infrastructure.persistence.RefreshTokenRepository;
 import com.sonifoy.auth.infrastructure.persistence.UserRepository;
 import com.sonifoy.auth.infrastructure.security.JwtService;
 import com.sonifoy.auth.infrastructure.security.RedisSessionKeyStore;
+import com.sonifoy.auth.infrastructure.adapter.out.messaging.KafkaProducerService;
+import com.sonifoy.auth.application.dto.UserRegisteredEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +29,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RedisSessionKeyStore redisSessionKeyStore;
+    private final KafkaProducerService kafkaProducerService;
 
     private static final SecureRandom secureRandom = new SecureRandom();
 
@@ -49,7 +52,17 @@ public class AuthService {
                     log.info("Generated verification code for {}: {}", user.getEmail(), verificationCode);
 
                     return userRepository.save(user)
-                            .doOnSuccess(u -> log.info("Registered new user: {}", u.getEmail()));
+                            .doOnSuccess(u -> {
+                                log.info("Registered new user: {}", u.getEmail());
+                                // Publish event
+                                kafkaProducerService.sendUserRegisteredEvent(UserRegisteredEvent.builder()
+                                        .userId(String.valueOf(u.getId()))
+                                        .email(u.getEmail())
+                                        .name(u.getName())
+                                        .profileType(u.getProfileType())
+                                        .timestamp(java.time.Instant.now())
+                                        .build());
+                            });
                 });
     }
 
