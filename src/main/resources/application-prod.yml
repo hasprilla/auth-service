@@ -1,4 +1,9 @@
 spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:sonifoy-kafka:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   r2dbc:
     url: r2dbc:postgresql://${DATABASE_URL_UNJ?:sonifoy-db:5432/auth_db}
     username: ${PGUSER:sonifoy_user}
