@@ -25,7 +25,7 @@ public class User {
     private String profileType; // e.g. "LISTENER", "ARTIST", "LABEL"
 
     @Builder.Default
-    private boolean isVerified = false;
+    private boolean verified = false;
     private String verificationCode;
 
     private LocalDateTime createdAt;

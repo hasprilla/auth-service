@@ -55,7 +55,7 @@ public class LocalAuthSeeder implements CommandLineRunner {
                 .name("Harvey Asprilla")
                 .password(encodedPassword)
                 .roles(new HashSet<>(Set.of("ADMIN", "USER")))
-                .isVerified(true)
+                .verified(true)
                 .profileType("PREMIUM")
                 .build();
 
@@ -74,7 +74,7 @@ public class LocalAuthSeeder implements CommandLineRunner {
                                                     .name(faker.name().fullName())
                                                     .password(encodedPassword)
                                                     .roles(new HashSet<>(Collections.singletonList("USER")))
-                                                    .isVerified(true)
+                                                    .verified(true)
                                                     .profileType("LISTENER")
                                                     .build();
                                         }).toList()).collectList()
